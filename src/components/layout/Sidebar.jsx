@@ -1,0 +1,128 @@
+import { NavLink } from 'react-router-dom';
+import {
+  LayoutDashboard,
+  CheckSquare,
+  Target,
+  Calendar,
+  BarChart3,
+  Sparkles,
+  Settings,
+  LogOut,
+  Menu,
+  X,
+} from 'lucide-react';
+import { useState } from 'react';
+import useAuthStore from '../../store/authStore';
+
+const navItems = [
+  { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { path: '/habits', label: 'Habits', icon: CheckSquare },
+  { path: '/todos', label: 'Todos', icon: Sparkles },
+  { path: '/goals', label: 'Goals', icon: Target },
+  { path: '/calendar', label: 'Calendar', icon: Calendar },
+  { path: '/insights', label: 'Insights', icon: BarChart3 },
+  { path: '/review', label: 'Review', icon: Sparkles },
+  { path: '/settings', label: 'Settings', icon: Settings },
+];
+
+export default function Sidebar() {
+  const [collapsed, setCollapsed] = useState(false);
+  const { profile, logout } = useAuthStore();
+
+  return (
+    <>
+      {/* Desktop Sidebar */}
+      <aside
+        className={`
+          hidden lg:flex flex-col fixed left-0 top-0 h-full z-30
+          bg-[var(--bg-secondary)] border-r border-[var(--border)]
+          transition-all duration-300 ease-in-out
+          ${collapsed ? 'w-20' : 'w-60'}
+        `}
+      >
+        {/* Logo */}
+        <div className={`flex items-center p-4 border-b border-[var(--border)] ${collapsed ? 'justify-center' : 'justify-between'}`}>
+          {!collapsed && (
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
+                <Sparkles className="text-white" size={18} />
+              </div>
+              <span className="font-bold font-display text-lg text-[var(--text-primary)]">HabitFlow</span>
+            </div>
+          )}
+          {collapsed && (
+            <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
+              <Sparkles className="text-white" size={18} />
+            </div>
+          )}
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            className="p-1.5 rounded-lg hover:bg-[var(--bg-hover)] text-[var(--text-muted)]"
+            aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            <Menu size={16} />
+          </button>
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
+          {navItems.map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) => `
+                flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
+                transition-all duration-200
+                ${collapsed ? 'justify-center' : ''}
+                ${isActive
+                  ? 'bg-accent/15 text-accent-light shadow-sm'
+                  : 'text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)]'
+                }
+              `}
+              title={collapsed ? item.label : undefined}
+            >
+              <item.icon size={18} />
+              {!collapsed && <span>{item.label}</span>}
+            </NavLink>
+          ))}
+        </nav>
+
+        {/* User info */}
+        <div className={`p-4 border-t border-[var(--border)] ${collapsed ? 'text-center' : ''}`}>
+          {!collapsed && (
+            <p className="text-sm text-[var(--text-secondary)] truncate mb-2">
+              {profile?.name || profile?.email}
+            </p>
+          )}
+          <button
+            onClick={logout}
+            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] hover:text-red-400 transition-colors w-full ${collapsed ? 'justify-center' : ''}`}
+            aria-label="Sign out"
+          >
+            <LogOut size={16} />
+            {!collapsed && <span>Sign Out</span>}
+          </button>
+        </div>
+      </aside>
+
+      {/* Mobile Bottom Nav */}
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-[var(--bg-secondary)] border-t border-[var(--border)] safe-area-bottom">
+        <div className="flex justify-around items-center py-2">
+          {navItems.slice(0, 5).map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) => `
+                flex flex-col items-center gap-0.5 px-2 py-1 rounded-lg text-[10px] font-medium transition-colors
+                ${isActive ? 'text-accent-light' : 'text-[var(--text-muted)]'}
+              `}
+            >
+              <item.icon size={18} />
+              <span>{item.label}</span>
+            </NavLink>
+          ))}
+        </div>
+      </nav>
+    </>
+  );
+}
