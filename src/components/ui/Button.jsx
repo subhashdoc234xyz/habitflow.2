@@ -1,11 +1,11 @@
 import { forwardRef } from 'react';
 
 const variants = {
-  primary: 'bg-accent hover:bg-accent-light text-white shadow-lg hover:shadow-accent/25',
-  secondary: 'bg-[var(--bg-card)] hover:bg-[var(--bg-hover)] text-[var(--text-primary)] border border-[var(--border)]',
-  ghost: 'hover:bg-[var(--bg-hover)] text-[var(--text-secondary)]',
-  danger: 'bg-red-600 hover:bg-red-700 text-white',
-  success: 'bg-green-600 hover:bg-green-700 text-white',
+  primary: 'bg-accent hover:bg-accent-light text-white shadow-[0_0_15px_rgba(56,189,248,0.4)] hover:shadow-[0_0_25px_rgba(56,189,248,0.6)] border border-accent-light/50',
+  secondary: 'glass hover:bg-[var(--bg-hover)] text-[var(--text-primary)] hover:border-accent/50 hover:shadow-[0_0_15px_rgba(56,189,248,0.2)]',
+  ghost: 'hover:bg-[var(--bg-hover)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]',
+  danger: 'bg-red-600/80 hover:bg-red-500 text-white border border-red-500/50 shadow-[0_0_10px_rgba(239,68,68,0.2)]',
+  success: 'bg-green-600/80 hover:bg-green-500 text-white border border-green-500/50 shadow-[0_0_10px_rgba(34,197,94,0.2)]',
 };
 
 const sizes = {

@@ -35,7 +35,7 @@ export default function Sidebar() {
       <aside
         className={`
           hidden lg:flex flex-col fixed left-0 top-0 h-full z-30
-          bg-[var(--bg-secondary)] border-r border-[var(--border)]
+          glass border-r border-[var(--border)] border-l-0 border-y-0 rounded-none
           transition-all duration-300 ease-in-out
           ${collapsed ? 'w-20' : 'w-60'}
         `}
@@ -106,7 +106,7 @@ export default function Sidebar() {
       </aside>
 
       {/* Mobile Bottom Nav */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-30 bg-[var(--bg-secondary)] border-t border-[var(--border)] safe-area-bottom">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-30 glass border-t border-[var(--border)] border-x-0 border-b-0 rounded-none safe-area-bottom">
         <div className="flex justify-around items-center py-2">
           {navItems.slice(0, 5).map((item) => (
             <NavLink

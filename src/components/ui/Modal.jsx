@@ -37,8 +37,8 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
       <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" />
       <div
         className={`
-          relative w-full ${sizes[size]} bg-[var(--bg-card)] border border-[var(--border)]
-          rounded-xl shadow-2xl animate-slide-up
+          relative w-full ${sizes[size]} glass overflow-hidden
+          rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] animate-slide-up
         `}
       >
         <div className="flex items-center justify-between p-5 border-b border-[var(--border)]">

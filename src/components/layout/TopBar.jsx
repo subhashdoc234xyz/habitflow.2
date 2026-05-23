@@ -9,7 +9,7 @@ export default function TopBar({ onMenuToggle }) {
   const today = new Date();
 
   return (
-    <header className="sticky top-0 z-20 bg-[var(--bg-primary)]/80 backdrop-blur-lg border-b border-[var(--border)]">
+    <header className="sticky top-0 z-20 glass border-b border-[var(--border)] border-x-0 border-t-0 rounded-none">
       <div className="flex items-center justify-between px-6 py-4">
         <div className="flex items-center gap-4">
           {/* Mobile menu toggle */}

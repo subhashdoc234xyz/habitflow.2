@@ -3,7 +3,7 @@ export default function Card({ children, className = '', hover = true, glow = fa
     <div
       onClick={onClick}
       className={`
-        bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-5
+        glass rounded-xl p-5 relative overflow-hidden
         ${hover ? 'card-hover cursor-pointer' : ''}
         ${glow ? 'glow-accent' : ''}
         ${onClick ? 'cursor-pointer' : ''}
@@ -11,6 +11,8 @@ export default function Card({ children, className = '', hover = true, glow = fa
       `}
       {...props}
     >
+      {/* Optional shine effect for premium look */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/5 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
       {children}
     </div>
   );
