@@ -15,7 +15,7 @@ export default function AppLayout() {
         <div className="absolute -bottom-[20%] left-[20%] w-[60%] h-[50%] rounded-full bg-accent/5 blur-[120px] mix-blend-screen animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
 
-      <div className="relative z-10 flex flex-col w-full min-h-screen">
+      <div className="relative z-10 flex min-h-screen w-full">
         <Sidebar />
         {/* Mobile overlay */}
         {mobileMenuOpen && (
@@ -25,7 +25,7 @@ export default function AppLayout() {
           />
         )}
 
-        <div className="lg:ml-60 pb-16 lg:pb-0 min-h-screen flex flex-col">
+        <div className="flex-1 flex flex-col min-h-screen min-w-0 pb-16 lg:pb-0">
           <TopBar onMenuToggle={() => setMobileMenuOpen(true)} />
           <main className="p-6 flex-1">
             <Outlet />

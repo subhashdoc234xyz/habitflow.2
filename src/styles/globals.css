@@ -2,20 +2,20 @@
 @import "tailwindcss";
 
 :root {
-  --bg-primary: #050608;
-  --bg-secondary: rgba(10, 12, 16, 0.65);
-  --bg-card: rgba(15, 20, 28, 0.45);
-  --bg-hover: rgba(56, 189, 248, 0.12);
-  --border: rgba(56, 189, 248, 0.18);
+  --bg-primary: #070b19;
+  --bg-secondary: rgba(10, 17, 40, 0.85);
+  --bg-card: rgba(16, 28, 64, 0.65);
+  --bg-hover: rgba(56, 189, 248, 0.18);
+  --border: rgba(255, 255, 255, 0.15);
   --accent: #38bdf8;
-  --accent-light: #7dd3fc;
-  --accent-glow: rgba(56, 189, 248, 0.5);
-  --success: #22c55e;
+  --accent-light: #ffffff;
+  --accent-glow: rgba(56, 189, 248, 0.45);
+  --success: #10b981;
   --warning: #f59e0b;
   --danger: #ef4444;
   --text-primary: #ffffff;
-  --text-secondary: #bae6fd;
-  --text-muted: #64748b;
+  --text-secondary: #e2e8f0;
+  --text-muted: #94a3b8;
 }
 
 * {
@@ -130,13 +130,12 @@ input, textarea, select {
   box-shadow: 0 0 20px var(--accent-glow);
 }
 
-/* Glass effect */
 .glass {
   background: var(--bg-card);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border: 1px solid var(--border);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5), inset 0 1px 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 /* Smooth transitions */

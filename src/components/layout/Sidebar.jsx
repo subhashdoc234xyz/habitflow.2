@@ -34,7 +34,7 @@ export default function Sidebar() {
       {/* Desktop Sidebar */}
       <aside
         className={`
-          hidden lg:flex flex-col fixed left-0 top-0 h-full z-30
+          hidden lg:flex flex-col sticky top-0 h-screen z-30
           glass border-r border-[var(--border)] border-l-0 border-y-0 rounded-none
           transition-all duration-300 ease-in-out
           ${collapsed ? 'w-20' : 'w-60'}
