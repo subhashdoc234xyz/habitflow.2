@@ -8,11 +8,11 @@ export default function AppLayout() {
 
   return (
     <div className="min-h-screen bg-[var(--bg-primary)] relative overflow-hidden">
-      {/* Animated Background Mesh */}
-      <div className="fixed inset-0 z-0 pointer-events-none opacity-60">
-        <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-accent/10 blur-[120px] mix-blend-screen animate-pulse" />
-        <div className="absolute top-[40%] -right-[10%] w-[40%] h-[60%] rounded-full bg-accent-light/5 blur-[100px] mix-blend-screen" />
-        <div className="absolute -bottom-[20%] left-[20%] w-[60%] h-[50%] rounded-full bg-accent/5 blur-[120px] mix-blend-screen animate-pulse" style={{ animationDelay: '2s' }} />
+      {/* Dynamic Floating Nebula Orbs */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="floating-orb floating-orb-1 -top-[10%] -left-[10%] w-[600px] h-[600px]" />
+        <div className="floating-orb floating-orb-2 top-[30%] -right-[10%] w-[500px] h-[500px]" />
+        <div className="floating-orb floating-orb-3 -bottom-[10%] left-[25%] w-[700px] h-[700px]" />
       </div>
 
       <div className="relative z-10 flex min-h-screen w-full">

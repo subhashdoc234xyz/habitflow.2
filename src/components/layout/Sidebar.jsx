@@ -47,7 +47,7 @@ export default function Sidebar() {
               <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
                 <Sparkles className="text-white" size={18} />
               </div>
-              <span className="font-bold font-display text-lg text-[var(--text-primary)]">HabitFlow</span>
+              <span className="font-extrabold font-display text-lg gradient-text">HabitFlow</span>
             </div>
           )}
           {collapsed && (
