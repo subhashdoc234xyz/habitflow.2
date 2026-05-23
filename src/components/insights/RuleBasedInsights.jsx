@@ -34,13 +34,22 @@ export default function RuleBasedInsights({ insights }) {
     <div className="space-y-3">
       {insights.map((insight, idx) => {
         const tone = toneConfig[insight.tone] || toneConfig.info;
+        const isConsistentCard = insight.headline && insight.headline.toLowerCase().includes('consistent');
         return (
           <div
             key={idx}
-            className={`flex items-start gap-3 p-4 rounded-xl border ${tone.bg} ${tone.border} animate-fade-in`}
-            style={{ animationDelay: `${idx * 50}ms` }}
+            className={`flex items-start gap-3 p-4 rounded-xl border ${tone.bg} ${tone.border} animate-fade-in transition-all duration-300 hover:scale-[1.01]`}
+            style={{
+              animationDelay: `${idx * 50}ms`,
+              ...(isConsistentCard ? { borderLeft: '3px solid #7C3AED' } : {})
+            }}
           >
-            <div className={`flex-shrink-0 ${tone.text}`}>
+            <div
+              className={`flex-shrink-0 p-2 rounded-lg ${
+                isConsistentCard ? 'text-[#7C3AED]' : tone.text
+              }`}
+              style={isConsistentCard ? { backgroundColor: 'rgba(124, 58, 237, 0.2)' } : {}}
+            >
               {tone.icon}
             </div>
             <div className="flex-1 min-w-0">

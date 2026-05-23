@@ -47,7 +47,7 @@ export default function SignupForm({ onToggle }) {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Your name"
-          className="w-full px-4 py-2.5 bg-[var(--bg-secondary)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
+          className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/15 rounded-xl text-white placeholder:text-slate-400 focus:outline-none focus:border-accent focus:bg-white/[0.08] focus:shadow-[0_0_15px_rgba(56,189,248,0.15)] transition-all duration-300"
           required
           aria-label="Full name"
         />
@@ -60,7 +60,7 @@ export default function SignupForm({ onToggle }) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@example.com"
-          className="w-full px-4 py-2.5 bg-[var(--bg-secondary)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
+          className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/15 rounded-xl text-white placeholder:text-slate-400 focus:outline-none focus:border-accent focus:bg-white/[0.08] focus:shadow-[0_0_15px_rgba(56,189,248,0.15)] transition-all duration-300"
           required
           aria-label="Email address"
         />
@@ -74,7 +74,7 @@ export default function SignupForm({ onToggle }) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="At least 6 characters"
-            className="w-full px-4 py-2.5 pr-10 bg-[var(--bg-secondary)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
+            className="w-full px-4 py-2.5 pr-10 bg-white/[0.04] border border-white/15 rounded-xl text-white placeholder:text-slate-400 focus:outline-none focus:border-accent focus:bg-white/[0.08] focus:shadow-[0_0_15px_rgba(56,189,248,0.15)] transition-all duration-300"
             required
             minLength={6}
             aria-label="Password"
@@ -97,7 +97,7 @@ export default function SignupForm({ onToggle }) {
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           placeholder="Repeat your password"
-          className="w-full px-4 py-2.5 bg-[var(--bg-secondary)] border border-[var(--border)] rounded-lg text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors"
+          className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/15 rounded-xl text-white placeholder:text-slate-400 focus:outline-none focus:border-accent focus:bg-white/[0.08] focus:shadow-[0_0_15px_rgba(56,189,248,0.15)] transition-all duration-300"
           required
           aria-label="Confirm password"
         />

@@ -41,11 +41,10 @@ export default function GeminiInsights({ geminiData }) {
           <p className="text-xs text-[var(--text-muted)]">Powered by Gemini AI</p>
         </div>
         <Button
-          variant="primary"
-          size="sm"
           onClick={handleGenerate}
           loading={loading}
           disabled={!geminiData}
+          className="bg-gradient-to-r from-[#a855f7] to-[#ec4899] border-0 text-white font-semibold rounded-[12px] shadow-[0_0_20px_rgba(168,85,247,0.6)] animate-coach-pulse hover:brightness-110 active:scale-[0.97]"
         >
           <Sparkles size={14} />
           {insights ? 'Refresh Insights' : 'Generate AI Insights'}

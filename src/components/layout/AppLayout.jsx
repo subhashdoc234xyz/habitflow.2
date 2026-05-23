@@ -8,11 +8,10 @@ export default function AppLayout() {
 
   return (
     <div className="min-h-screen bg-[var(--bg-primary)] relative overflow-hidden">
-      {/* Dynamic Floating Nebula Orbs */}
-      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
-        <div className="floating-orb floating-orb-1 -top-[10%] -left-[10%] w-[600px] h-[600px]" />
-        <div className="floating-orb floating-orb-2 top-[30%] -right-[10%] w-[500px] h-[500px]" />
-        <div className="floating-orb floating-orb-3 -bottom-[10%] left-[25%] w-[700px] h-[700px]" />
+      {/* Subtle Animated Gradient Orbs */}
+      <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden opacity-15">
+        <div className="absolute -top-[10%] -left-[10%] w-[550px] h-[550px] rounded-full bg-[#7C3AED] blur-[120px] animate-pulse" />
+        <div className="absolute top-[40%] -right-[10%] w-[450px] h-[450px] rounded-full bg-[#3B82F6] blur-[120px] animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
 
       <div className="relative z-10 flex min-h-screen w-full">

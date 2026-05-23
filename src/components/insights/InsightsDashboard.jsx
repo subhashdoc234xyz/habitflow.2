@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, AreaChart, Area, PieChart, Pie, Cell } from 'recharts';
 import RuleBasedInsights from './RuleBasedInsights';
 import GeminiInsights from './GeminiInsights';
 import useHabitStore from '../../store/habitStore';
@@ -110,47 +110,53 @@ export default function InsightsDashboard() {
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Habit completion rate */}
-        <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-5">
+        <div className="glass p-5 border border-[#7C3AED]/40 shadow-[0_8px_32px_rgba(0,0,0,0.3),_0_0_15px_rgba(124,58,237,0.2)]">
           <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Habit Completion Rate (4 Weeks)</h3>
-          <div className="h-64">
+          <div className="h-64 bg-white/[0.03] rounded-lg p-2">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={completionChartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
                 <XAxis dataKey="week" stroke="var(--text-muted)" fontSize={12} />
                 <YAxis stroke="var(--text-muted)" fontSize={12} domain={[0, 100]} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: 'var(--bg-card)',
-                    border: '1px solid var(--border)',
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                    border: '1px solid rgba(255,255,255,0.1)',
                     borderRadius: '8px',
                     color: 'var(--text-primary)',
                   }}
                 />
-                <Bar dataKey="rate" fill="#6366f1" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="rate" fill="#7C3AED" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Mood over time */}
-        <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-5">
+        <div className="glass p-5 border border-[#ec4899]/40 shadow-[0_8px_32px_rgba(0,0,0,0.3),_0_0_15px_rgba(236,72,153,0.2)]">
           <h3 className="text-sm font-semibold text-[var(--text-primary)] mb-4">Mood Over Time (7 Days)</h3>
-          <div className="h-64">
+          <div className="h-64 bg-white/[0.03] rounded-lg p-2">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={moodChartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+              <AreaChart data={moodChartData}>
+                <defs>
+                  <linearGradient id="moodGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#ec4899" stopOpacity={0.4}/>
+                    <stop offset="95%" stopColor="#ec4899" stopOpacity={0.0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
                 <XAxis dataKey="day" stroke="var(--text-muted)" fontSize={12} />
                 <YAxis stroke="var(--text-muted)" fontSize={12} domain={[0, 5]} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: 'var(--bg-card)',
-                    border: '1px solid var(--border)',
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                    border: '1px solid rgba(255,255,255,0.1)',
                     borderRadius: '8px',
                     color: 'var(--text-primary)',
                   }}
                 />
-                <Line type="monotone" dataKey="mood" stroke="#818cf8" strokeWidth={2} dot={{ fill: '#6366f1' }} />
-              </LineChart>
+                <Area type="monotone" dataKey="mood" stroke="#ec4899" strokeWidth={2} fillOpacity={1} fill="url(#moodGradient)" dot={{ fill: '#ec4899' }} />
+              </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>

@@ -1,8 +1,8 @@
 import { forwardRef } from 'react';
 
 const variants = {
-  primary: 'bg-gradient-to-r from-[#ec4899] via-[#a78bfa] to-[#38bdf8] text-white border border-white/25 shadow-[0_4px_20px_rgba(236,72,153,0.35)] hover:shadow-[0_8px_30px_rgba(56,189,248,0.65)]',
-  secondary: 'glass bg-white/[0.04] border border-white/[0.18] text-white hover:bg-white/[0.08] hover:border-[#38bdf8] hover:shadow-[0_4px_20px_rgba(56,189,248,0.25)]',
+  primary: 'bg-gradient-to-r from-[#7C3AED] to-[#3B82F6] text-white border-0 shadow-[0_4px_15px_rgba(124,58,237,0.4)] font-semibold rounded-[12px] hover:brightness-110 active:scale-[0.97]',
+  secondary: 'border border-white/20 bg-white/5 text-white font-semibold rounded-[12px] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:bg-white/10 active:scale-[0.97]',
   ghost: 'hover:bg-white/[0.04] border border-transparent hover:border-white/10 text-[var(--text-secondary)] hover:text-white',
   danger: 'bg-gradient-to-r from-red-500 to-[#e11d48] text-white border border-white/20 shadow-[0_4px_20px_rgba(239,68,68,0.3)]',
   success: 'bg-gradient-to-r from-[#10b981] to-[#059669] text-white border border-white/20 shadow-[0_4px_20px_rgba(16,185,129,0.3)]',

@@ -34,14 +34,18 @@ export default function Sidebar() {
       {/* Desktop Sidebar */}
       <aside
         className={`
-          hidden lg:flex flex-col sticky top-0 h-screen z-30
-          glass border-r border-[var(--border)] border-l-0 border-y-0 rounded-none
-          transition-all duration-300 ease-in-out
+          hidden lg:flex flex-col sticky top-0 h-screen z-30 transition-all duration-300 ease-in-out
           ${collapsed ? 'w-20' : 'w-60'}
         `}
+        style={{
+          background: 'rgba(255, 255, 255, 0.03)',
+          borderRight: '1px solid rgba(255, 255, 255, 0.08)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+        }}
       >
         {/* Logo */}
-        <div className={`flex items-center p-4 border-b border-[var(--border)] ${collapsed ? 'justify-center' : 'justify-between'}`}>
+        <div className={`flex items-center p-4 border-b border-white/5 ${collapsed ? 'justify-center' : 'justify-between'}`}>
           {!collapsed && (
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
@@ -71,12 +75,12 @@ export default function Sidebar() {
               key={item.path}
               to={item.path}
               className={({ isActive }) => `
-                flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium
+                flex items-center gap-3 px-3 py-2.5 text-sm font-medium
                 transition-all duration-200
                 ${collapsed ? 'justify-center' : ''}
                 ${isActive
-                  ? 'bg-accent/15 text-accent-light shadow-sm'
-                  : 'text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)]'
+                  ? 'bg-gradient-to-r from-[#7C3AED]/20 to-[#3B82F6]/5 text-white border-l-[3px] border-[#7C3AED] rounded-r-lg shadow-sm'
+                  : 'text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)] rounded-lg'
                 }
               `}
               title={collapsed ? item.label : undefined}
@@ -88,7 +92,7 @@ export default function Sidebar() {
         </nav>
 
         {/* User info */}
-        <div className={`p-4 border-t border-[var(--border)] ${collapsed ? 'text-center' : ''}`}>
+        <div className={`p-4 border-t border-white/5 ${collapsed ? 'text-center' : ''}`}>
           {!collapsed && (
             <p className="text-sm text-[var(--text-secondary)] truncate mb-2">
               {profile?.name || profile?.email}
