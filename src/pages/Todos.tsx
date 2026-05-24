@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { Plus, Check, Trash2, Clock, X, AlertCircle } from 'lucide-react';
 import { GlassCard } from '../components/GlassCard';
@@ -61,29 +61,69 @@ export function Todos() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.title.trim()) return;
+  const handleSubmit = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (!formData.title.trim()) {
+      setFormError('Task title is required');
+      return;
+    }
 
     setSubmitting(true);
     setFormError(null);
+
+    const timeout = setTimeout(() => {
+      setSubmitting(false);
+      setFormError('Request timed out. Check your connection and try again.');
+    }, 10000);
 
     try {
       await addTodo({
         title: formData.title.trim(),
         priority: formData.priority,
-        category: formData.category,
+        category: formData.category || 'General',
         dueDate: formData.dueDate,
         dueTime: formData.dueTime,
       });
+      clearTimeout(timeout);
+      // Reset form state
+      setFormData({
+        title: '',
+        priority: 'medium',
+        category: 'General',
+        dueDate: new Date().toISOString().split('T')[0],
+        dueTime: '',
+      });
+      setFormError(null);
       setShowAddModal(false);
     } catch (err: any) {
+      clearTimeout(timeout);
       console.error('Failed to add todo:', err);
-      setFormError(err.message || 'Failed to save todo. Please try again.');
+      if (err.code === 'permission-denied') {
+        setFormError('Permission denied. Please sign out and sign in again.');
+      } else if (err.code === 'unavailable') {
+        setFormError('No internet connection. Please check your network.');
+      } else if (err.code === 'unauthenticated') {
+        setFormError('Session expired. Please sign in again.');
+      } else {
+        setFormError(err.message || 'Something went wrong. Please try again.');
+      }
     } finally {
+      clearTimeout(timeout);
       setSubmitting(false);
     }
   };
+
+  useEffect(() => {
+    if (!showAddModal) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSubmitting(false);
+        setShowAddModal(false);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [showAddModal]);
 
   const filteredTodos = todos.filter(todo => {
     const todayStr = new Date().toISOString().split('T')[0];
@@ -230,10 +270,22 @@ export function Todos() {
 
       {/* Add Task Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fadeIn">
-          <GlassCard className="w-full max-w-[500px] shadow-2xl relative border-white/80 p-6">
+        <div 
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setSubmitting(false);
+              setShowAddModal(false);
+            }
+          }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm animate-fadeIn"
+        >
+          <GlassCard onClick={e => e.stopPropagation()} className="w-full max-w-[500px] shadow-2xl relative border-white/80 p-6">
             <button 
-              onClick={() => setShowAddModal(false)}
+              onClick={() => {
+                setSubmitting(false);
+                setShowAddModal(false);
+              }}
+              type="button"
               className="absolute top-4 right-4 p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
             >
               <X className="w-5 h-5" />
@@ -311,18 +363,33 @@ export function Todos() {
               <div className="flex gap-3 mt-4">
                 <GhostButton 
                   type="button" 
-                  onClick={() => setShowAddModal(false)}
+                  onClick={() => {
+                    setSubmitting(false);
+                    setFormError(null);
+                    setShowAddModal(false);
+                  }}
                   className="flex-1 py-3 text-sm font-bold"
-                  disabled={submitting}
                 >
                   Cancel
                 </GhostButton>
                 <PrimaryButton 
                   type="submit" 
+                  onClick={handleSubmit}
+                  disabled={submitting || !formData.title?.trim()}
                   className="flex-1 py-3 text-sm font-bold bg-gradient-to-r from-violet-600 to-indigo-500"
-                  disabled={submitting}
+                  style={{
+                    opacity: submitting ? 0.7 : 1,
+                    cursor: submitting ? 'not-allowed' : 'pointer',
+                  }}
                 >
-                  {submitting ? 'Saving...' : 'Add Task'}
+                  {submitting ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin inline-block" />
+                      Saving...
+                    </span>
+                  ) : (
+                    'Add Task'
+                  )}
                 </PrimaryButton>
               </div>
             </form>
