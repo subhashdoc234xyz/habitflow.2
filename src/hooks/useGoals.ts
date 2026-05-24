@@ -3,7 +3,7 @@ import {
   collection, addDoc, updateDoc, deleteDoc,
   doc, onSnapshot, query, orderBy, serverTimestamp
 } from 'firebase/firestore'
-import { db } from '../lib/firebase'
+import { auth, db } from '../lib/firebase'
 import { useAuth } from '../contexts/AuthContext'
 
 export interface Goal {
@@ -35,8 +35,9 @@ export const useGoals = () => {
   }, [user])
 
   const addGoal = async (data: Omit<Goal, 'id' | 'createdAt' | 'progress'>) => {
-    if (!user) throw new Error('Not authenticated')
-    await addDoc(collection(db, 'users', user.uid, 'goals'), {
+    const uid = user?.uid || auth.currentUser?.uid
+    if (!uid) throw new Error('Not authenticated — please sign in again')
+    await addDoc(collection(db, 'users', uid, 'goals'), {
       ...data,
       progress: 0,
       createdAt: serverTimestamp()
@@ -44,13 +45,15 @@ export const useGoals = () => {
   }
 
   const updateGoal = async (id: string, updates: Partial<Goal>) => {
-    if (!user) return
-    await updateDoc(doc(db, 'users', user.uid, 'goals', id), updates)
+    const uid = user?.uid || auth.currentUser?.uid
+    if (!uid) return
+    await updateDoc(doc(db, 'users', uid, 'goals', id), updates)
   }
 
   const deleteGoal = async (id: string) => {
-    if (!user) return
-    await deleteDoc(doc(db, 'users', user.uid, 'goals', id))
+    const uid = user?.uid || auth.currentUser?.uid
+    if (!uid) return
+    await deleteDoc(doc(db, 'users', uid, 'goals', id))
   }
 
   return { goals, loading, addGoal, updateGoal, deleteGoal }

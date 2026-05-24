@@ -3,7 +3,7 @@ import {
   collection, addDoc, updateDoc, deleteDoc,
   doc, onSnapshot, query, orderBy, serverTimestamp
 } from 'firebase/firestore'
-import { db } from '../lib/firebase'
+import { auth, db } from '../lib/firebase'
 import { useAuth } from '../contexts/AuthContext'
 
 export interface Habit {
@@ -59,16 +59,17 @@ export const useHabits = () => {
   }, [user])
 
   const addHabit = async (habitData: Omit<Habit, 'id' | 'createdAt' | 'userId' | 'streak' | 'bestStreak' | 'completedDates'>) => {
-    if (!user) throw new Error('User not authenticated')
+    const uid = user?.uid || auth.currentUser?.uid
+    if (!uid) throw new Error('User not authenticated — please sign in again')
     
     try {
-      const habitsRef = collection(db, 'users', user.uid, 'habits')
+      const habitsRef = collection(db, 'users', uid, 'habits')
       const docRef = await addDoc(habitsRef, {
         ...habitData,
         streak: 0,
         bestStreak: 0,
         completedDates: [],
-        userId: user.uid,
+        userId: uid,
         createdAt: serverTimestamp()
       })
       console.log('Habit added with ID:', docRef.id)
@@ -80,19 +81,22 @@ export const useHabits = () => {
   }
 
   const updateHabit = async (habitId: string, updates: Partial<Habit>) => {
-    if (!user) throw new Error('User not authenticated')
-    const habitRef = doc(db, 'users', user.uid, 'habits', habitId)
+    const uid = user?.uid || auth.currentUser?.uid
+    if (!uid) throw new Error('User not authenticated — please sign in again')
+    const habitRef = doc(db, 'users', uid, 'habits', habitId)
     await updateDoc(habitRef, updates)
   }
 
   const deleteHabit = async (habitId: string) => {
-    if (!user) throw new Error('User not authenticated')
-    const habitRef = doc(db, 'users', user.uid, 'habits', habitId)
+    const uid = user?.uid || auth.currentUser?.uid
+    if (!uid) throw new Error('User not authenticated — please sign in again')
+    const habitRef = doc(db, 'users', uid, 'habits', habitId)
     await deleteDoc(habitRef)
   }
 
   const toggleHabitComplete = async (habitId: string) => {
-    if (!user) return
+    const uid = user?.uid || auth.currentUser?.uid
+    if (!uid) return
     const today = new Date().toISOString().split('T')[0]
     const habit = habits.find(h => h.id === habitId)
     if (!habit) return

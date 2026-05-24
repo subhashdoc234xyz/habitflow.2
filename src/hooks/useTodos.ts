@@ -3,7 +3,7 @@ import {
   collection, addDoc, updateDoc, deleteDoc,
   doc, onSnapshot, query, orderBy, serverTimestamp
 } from 'firebase/firestore'
-import { db } from '../lib/firebase'
+import { auth, db } from '../lib/firebase'
 import { useAuth } from '../contexts/AuthContext'
 
 export interface Todo {
@@ -34,8 +34,9 @@ export const useTodos = () => {
   }, [user])
 
   const addTodo = async (data: Omit<Todo, 'id' | 'createdAt' | 'completed'>) => {
-    if (!user) throw new Error('Not authenticated')
-    await addDoc(collection(db, 'users', user.uid, 'todos'), {
+    const uid = user?.uid || auth.currentUser?.uid
+    if (!uid) throw new Error('Not authenticated — please sign in again')
+    await addDoc(collection(db, 'users', uid, 'todos'), {
       ...data,
       completed: false,
       createdAt: serverTimestamp()
@@ -43,18 +44,21 @@ export const useTodos = () => {
   }
 
   const toggleTodo = async (id: string, completed: boolean) => {
-    if (!user) return
-    await updateDoc(doc(db, 'users', user.uid, 'todos', id), { completed })
+    const uid = user?.uid || auth.currentUser?.uid
+    if (!uid) return
+    await updateDoc(doc(db, 'users', uid, 'todos', id), { completed })
   }
 
   const deleteTodo = async (id: string) => {
-    if (!user) return
-    await deleteDoc(doc(db, 'users', user.uid, 'todos', id))
+    const uid = user?.uid || auth.currentUser?.uid
+    if (!uid) return
+    await deleteDoc(doc(db, 'users', uid, 'todos', id))
   }
 
   const updateTodo = async (id: string, updates: Partial<Todo>) => {
-    if (!user) return
-    await updateDoc(doc(db, 'users', user.uid, 'todos', id), updates)
+    const uid = user?.uid || auth.currentUser?.uid
+    if (!uid) return
+    await updateDoc(doc(db, 'users', uid, 'todos', id), updates)
   }
 
   return { todos, loading, addTodo, toggleTodo, deleteTodo, updateTodo }

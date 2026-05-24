@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Sparkles, Mail, Lock, AlertCircle } from 'lucide-react';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-import { auth } from '../lib/firebase';
+import { doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
+import { auth, db } from '../lib/firebase';
 import { GlassCard } from '../components/GlassCard';
 import { PrimaryButton } from '../components/PrimaryButton';
 import { GlassInput } from '../components/GlassInput';
@@ -23,7 +24,21 @@ export function Login() {
 
     try {
       if (isSignUp) {
-        await createUserWithEmailAndPassword(auth, email.trim(), password);
+        const userCredential = await createUserWithEmailAndPassword(auth, email.trim(), password);
+        const user = userCredential.user;
+        
+        // Create user doc on signup
+        const userRef = doc(db, 'users', user.uid);
+        await setDoc(userRef, {
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName || email.split('@')[0],
+          photoURL: user.photoURL || null,
+          createdAt: serverTimestamp(),
+          level: 1,
+          xp: 0,
+          streak: 0,
+        });
       } else {
         await signInWithEmailAndPassword(auth, email.trim(), password);
       }
@@ -50,16 +65,47 @@ export function Login() {
     setError(null);
     try {
       const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
+      provider.addScope('email');
+      provider.addScope('profile');
+      
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      
+      console.log('Google sign in success:', user.uid, user.email);
+      
+      // Create user document in Firestore if first time
+      const userRef = doc(db, 'users', user.uid);
+      const userSnap = await getDoc(userRef);
+      
+      if (!userSnap.exists()) {
+        await setDoc(userRef, {
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+          createdAt: serverTimestamp(),
+          level: 1,
+          xp: 0,
+          streak: 0,
+        });
+        console.log('New user document created in Firestore');
+      }
     } catch (err: any) {
       console.error('Google Sign In error:', err);
-      if (err.code !== 'auth/popup-closed-by-user') {
-        setError(err.message || 'Google sign in failed.');
+      let message = err.message || 'Google sign in failed.';
+      if (err.code === 'auth/popup-blocked') {
+        message = 'Popup was blocked. Please allow popups for this site.';
+      } else if (err.code === 'auth/popup-closed-by-user') {
+        message = 'Sign in cancelled.';
+      } else if (err.code === 'auth/unauthorized-domain') {
+        message = 'This domain is not authorized. Add it in Firebase Console → Auth → Settings → Authorized domains.';
       }
+      setError(message);
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 relative z-10">
