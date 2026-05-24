@@ -1,0 +1,124 @@
+import { useState, useEffect } from 'react'
+import {
+  collection, addDoc, updateDoc, deleteDoc,
+  doc, onSnapshot, query, orderBy, serverTimestamp
+} from 'firebase/firestore'
+import { db } from '../lib/firebase'
+import { useAuth } from '../contexts/AuthContext'
+
+export interface Habit {
+  id: string
+  name: string
+  description?: string
+  category: string
+  color: string
+  icon: string
+  frequency: 'daily' | 'weekly'
+  targetDays?: number[]
+  streak: number
+  bestStreak: number
+  completedDates: string[]
+  createdAt: any
+  userId: string
+}
+
+export const useHabits = () => {
+  const { user } = useAuth()
+  const [habits, setHabits] = useState<Habit[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!user) {
+      setHabits([])
+      setLoading(false)
+      return
+    }
+
+    const habitsRef = collection(db, 'users', user.uid, 'habits')
+    const q = query(habitsRef, orderBy('createdAt', 'desc'))
+
+    const unsubscribe = onSnapshot(q,
+      (snapshot) => {
+        const habitsData = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        })) as Habit[]
+        setHabits(habitsData)
+        setLoading(false)
+        setError(null)
+      },
+      (err) => {
+        console.error('Firestore error:', err)
+        setError(err.message)
+        setLoading(false)
+      }
+    )
+
+    return unsubscribe
+  }, [user])
+
+  const addHabit = async (habitData: Omit<Habit, 'id' | 'createdAt' | 'userId' | 'streak' | 'bestStreak' | 'completedDates'>) => {
+    if (!user) throw new Error('User not authenticated')
+    
+    try {
+      const habitsRef = collection(db, 'users', user.uid, 'habits')
+      const docRef = await addDoc(habitsRef, {
+        ...habitData,
+        streak: 0,
+        bestStreak: 0,
+        completedDates: [],
+        userId: user.uid,
+        createdAt: serverTimestamp()
+      })
+      console.log('Habit added with ID:', docRef.id)
+      return docRef.id
+    } catch (err: any) {
+      console.error('Error adding habit:', err)
+      throw err
+    }
+  }
+
+  const updateHabit = async (habitId: string, updates: Partial<Habit>) => {
+    if (!user) throw new Error('User not authenticated')
+    const habitRef = doc(db, 'users', user.uid, 'habits', habitId)
+    await updateDoc(habitRef, updates)
+  }
+
+  const deleteHabit = async (habitId: string) => {
+    if (!user) throw new Error('User not authenticated')
+    const habitRef = doc(db, 'users', user.uid, 'habits', habitId)
+    await deleteDoc(habitRef)
+  }
+
+  const toggleHabitComplete = async (habitId: string) => {
+    if (!user) return
+    const today = new Date().toISOString().split('T')[0]
+    const habit = habits.find(h => h.id === habitId)
+    if (!habit) return
+
+    const completedDates = habit.completedDates || []
+    const alreadyDone = completedDates.includes(today)
+    const newDates = alreadyDone
+      ? completedDates.filter(d => d !== today)
+      : [...completedDates, today]
+
+    let streak = 0
+    const sorted = [...newDates].sort().reverse()
+    for (let i = 0; i < sorted.length; i++) {
+      const expected = new Date()
+      expected.setDate(expected.getDate() - i)
+      if (sorted[i] === expected.toISOString().split('T')[0]) {
+        streak++
+      } else break
+    }
+
+    await updateHabit(habitId, {
+      completedDates: newDates,
+      streak,
+      bestStreak: Math.max(streak, habit.bestStreak || 0)
+    })
+  }
+
+  return { habits, loading, error, addHabit, updateHabit, deleteHabit, toggleHabitComplete }
+}

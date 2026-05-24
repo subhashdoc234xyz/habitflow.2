@@ -1,11 +1,24 @@
 import { GlassCard } from '../components/GlassCard';
 import { SecondaryButton } from '../components/SecondaryButton';
+import { signOut } from 'firebase/auth';
+import { auth } from '../lib/firebase';
+import { useAuth } from '../contexts/AuthContext';
 
-interface SettingsProps {
-  onLogout?: () => void;
-}
+export function SettingsPage() {
+  const { user } = useAuth();
 
-export function SettingsPage({ onLogout }: SettingsProps) {
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
+
+  const email = user?.email || 'user@example.com';
+  const name = email.split('@')[0];
+  const initial = name.charAt(0).toUpperCase();
+
   return (
     <div className="flex flex-col gap-6 w-full max-w-4xl mx-auto pb-12">
       <div className="mb-2">
@@ -17,12 +30,12 @@ export function SettingsPage({ onLogout }: SettingsProps) {
         <div className="flex items-center gap-6">
           <div className="w-20 h-20 rounded-full bg-gradient-to-br from-violet-500 to-indigo-500 p-1">
             <div className="w-full h-full rounded-full bg-white flex items-center justify-center text-2xl font-bold text-violet-600">
-              A
+              {initial}
             </div>
           </div>
           <div className="flex-1">
-            <h4 className="font-bold text-gray-900 text-lg">Alex Doe</h4>
-            <p className="text-gray-500">alex.doe@example.com</p>
+            <h4 className="font-bold text-gray-900 text-lg capitalize">{name}</h4>
+            <p className="text-gray-500">{email}</p>
           </div>
           <SecondaryButton>Edit Profile</SecondaryButton>
         </div>
@@ -60,7 +73,7 @@ export function SettingsPage({ onLogout }: SettingsProps) {
               <h4 className="font-bold text-gray-800">Log Out</h4>
               <p className="text-sm text-gray-500">Sign out of your account on this device</p>
             </div>
-            <SecondaryButton onClick={onLogout}>Log out</SecondaryButton>
+            <SecondaryButton onClick={handleLogout}>Log out</SecondaryButton>
           </div>
           <div className="flex items-center justify-between mt-4">
             <div>
@@ -76,3 +89,4 @@ export function SettingsPage({ onLogout }: SettingsProps) {
     </div>
   );
 }
+
