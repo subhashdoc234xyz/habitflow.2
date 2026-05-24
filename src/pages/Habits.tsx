@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Plus, Check, X, Trash2, AlertCircle } from 'lucide-react';
+import { auth } from '../lib/firebase';
 import { GlassCard } from '../components/GlassCard';
 import { PrimaryButton } from '../components/PrimaryButton';
 import { GhostButton } from '../components/GhostButton';
@@ -50,10 +51,20 @@ export function Habits() {
     setSubmitting(true);
     setFormError(null);
 
+    // Debug: log auth state and env before write
+    console.log('[Habits] Auth user before write:', auth.currentUser?.uid);
+    console.log('[Habits] ENV check — project:', import.meta.env.VITE_FIREBASE_PROJECT_ID);
+
+    if (!auth.currentUser) {
+      setSubmitting(false);
+      setFormError('Not signed in. Please refresh and sign in again.');
+      return;
+    }
+
     const timeout = setTimeout(() => {
       setSubmitting(false);
       setFormError('Request timed out. Check your connection and try again.');
-    }, 10000);
+    }, 8000);
 
     try {
       await addHabit({
@@ -78,15 +89,17 @@ export function Habits() {
       setShowAddModal(false);
     } catch (err: any) {
       clearTimeout(timeout);
-      console.error('Failed to add habit:', err);
+      console.error('[Habits] Failed to add habit:', err);
       if (err.code === 'permission-denied') {
-        setFormError('Permission denied. Please sign out and sign in again.');
+        setFormError('Permission denied — Firestore rules blocking write. Check Firebase Console.');
       } else if (err.code === 'unavailable') {
         setFormError('No internet connection. Please check your network.');
       } else if (err.code === 'unauthenticated') {
-        setFormError('Session expired. Please sign in again.');
+        setFormError('Not authenticated — please sign out and sign in again.');
+      } else if (err.message?.includes('auth') || err.message?.includes('permission')) {
+        setFormError('Auth error — please refresh the page and sign in again.');
       } else {
-        setFormError(err.message || 'Something went wrong. Please try again.');
+        setFormError(err.message || 'Something went wrong. Open console for details.');
       }
     } finally {
       clearTimeout(timeout);

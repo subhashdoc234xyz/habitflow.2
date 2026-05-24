@@ -36,12 +36,21 @@ export const useGoals = () => {
 
   const addGoal = async (data: Omit<Goal, 'id' | 'createdAt' | 'progress'>) => {
     const uid = user?.uid || auth.currentUser?.uid
+    console.log('[useGoals] addGoal called — uid:', uid)
     if (!uid) throw new Error('Not authenticated — please sign in again')
-    await addDoc(collection(db, 'users', uid, 'goals'), {
-      ...data,
-      progress: 0,
-      createdAt: serverTimestamp()
-    })
+    try {
+      await addDoc(collection(db, 'users', uid, 'goals'), {
+        ...data,
+        progress: 0,
+        createdAt: serverTimestamp()
+      })
+    } catch (err: any) {
+      console.error('[useGoals] Error adding goal:', err)
+      if (err.code === 'permission-denied') {
+        console.error('[useGoals] PERMISSION DENIED — Firestore rules may be blocking. Check Firebase Console.')
+      }
+      throw err
+    }
   }
 
   const updateGoal = async (id: string, updates: Partial<Goal>) => {

@@ -35,12 +35,21 @@ export const useTodos = () => {
 
   const addTodo = async (data: Omit<Todo, 'id' | 'createdAt' | 'completed'>) => {
     const uid = user?.uid || auth.currentUser?.uid
+    console.log('[useTodos] addTodo called — uid:', uid)
     if (!uid) throw new Error('Not authenticated — please sign in again')
-    await addDoc(collection(db, 'users', uid, 'todos'), {
-      ...data,
-      completed: false,
-      createdAt: serverTimestamp()
-    })
+    try {
+      await addDoc(collection(db, 'users', uid, 'todos'), {
+        ...data,
+        completed: false,
+        createdAt: serverTimestamp()
+      })
+    } catch (err: any) {
+      console.error('[useTodos] Error adding todo:', err)
+      if (err.code === 'permission-denied') {
+        console.error('[useTodos] PERMISSION DENIED — Firestore rules may be blocking. Check Firebase Console.')
+      }
+      throw err
+    }
   }
 
   const toggleTodo = async (id: string, completed: boolean) => {

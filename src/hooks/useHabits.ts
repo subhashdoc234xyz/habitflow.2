@@ -60,6 +60,7 @@ export const useHabits = () => {
 
   const addHabit = async (habitData: Omit<Habit, 'id' | 'createdAt' | 'userId' | 'streak' | 'bestStreak' | 'completedDates'>) => {
     const uid = user?.uid || auth.currentUser?.uid
+    console.log('[useHabits] addHabit called — uid:', uid)
     if (!uid) throw new Error('User not authenticated — please sign in again')
     
     try {
@@ -72,10 +73,13 @@ export const useHabits = () => {
         userId: uid,
         createdAt: serverTimestamp()
       })
-      console.log('Habit added with ID:', docRef.id)
+      console.log('[useHabits] Habit added with ID:', docRef.id)
       return docRef.id
     } catch (err: any) {
-      console.error('Error adding habit:', err)
+      console.error('[useHabits] Error adding habit:', err)
+      if (err.code === 'permission-denied') {
+        console.error('[useHabits] PERMISSION DENIED — Firestore rules may be blocking. Check Firebase Console → Firestore → Rules')
+      }
       throw err
     }
   }
