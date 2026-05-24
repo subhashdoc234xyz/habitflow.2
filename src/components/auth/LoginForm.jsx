@@ -37,7 +37,7 @@ export default function LoginForm({ onToggle }) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@example.com"
-          className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/15 rounded-xl text-white placeholder:text-slate-400 focus:outline-none focus:border-accent focus:bg-white/[0.08] focus:shadow-[0_0_15px_rgba(56,189,248,0.15)] transition-all duration-300"
+          className="w-full placeholder:text-slate-400"
           required
           aria-label="Email address"
         />
@@ -51,7 +51,7 @@ export default function LoginForm({ onToggle }) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
-            className="w-full px-4 py-2.5 bg-white/[0.04] border border-white/15 rounded-xl text-white placeholder:text-slate-400 focus:outline-none focus:border-accent focus:bg-white/[0.08] focus:shadow-[0_0_15px_rgba(56,189,248,0.15)] transition-all duration-300"
+            className="w-full placeholder:text-slate-400"
             required
             aria-label="Password"
           />

@@ -87,15 +87,21 @@ export default function Dashboard() {
           <Card hover={false}>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold text-[var(--text-primary)]">Today's Habits</h2>
-              <Button size="sm" variant="secondary" onClick={() => setShowHabitForm(true)}>
-                <Plus size={14} /> Add
+              <Button variant="icon" onClick={() => setShowHabitForm(true)}>
+                <Plus size={16} />
               </Button>
             </div>
             <div className="space-y-2">
               {todayHabits.length === 0 && (
-                <p className="text-[var(--text-muted)] text-sm py-4 text-center">
-                  No habits yet. Create your first habit!
-                </p>
+                <div className="flex flex-col items-center justify-center py-8 gap-3">
+                  <CheckSquare size={48} className="text-[var(--text-muted)] opacity-50" />
+                  <p className="text-[rgba(255,255,255,0.4)] text-sm text-center">
+                    No habits yet
+                  </p>
+                  <Button variant="primary" onClick={() => setShowHabitForm(true)} className="mt-2 text-sm shadow-[0_0_20px_rgba(124,58,237,0.5)]">
+                    <Plus size={16} /> Create your first habit
+                  </Button>
+                </div>
               )}
               {todayHabits.map((habit) => {
                 const log = habitLogs.find((l) => l.habit_id === habit.id && l.completed_date === today);
@@ -129,10 +135,16 @@ export default function Dashboard() {
         {/* Completion Ring */}
         <Card hover={false} className="flex flex-col items-center justify-center">
           <div className="relative w-24 h-24 mb-3">
-            <svg className="w-24 h-24 -rotate-90" viewBox="0 0 100 100">
-              <circle cx="50" cy="50" r="42" fill="none" stroke="var(--bg-hover)" strokeWidth="8" />
+            <svg className="w-24 h-24 -rotate-90 drop-shadow-[0_4px_10px_rgba(124,58,237,0.4)]" viewBox="0 0 100 100">
+              <defs>
+                <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stopColor="#7C3AED" />
+                  <stop offset="100%" stopColor="#ec4899" />
+                </linearGradient>
+              </defs>
+              <circle cx="50" cy="50" r="42" fill="none" stroke="var(--bg-hover)" strokeWidth="6" />
               <circle
-                cx="50" cy="50" r="42" fill="none" stroke="var(--accent)" strokeWidth="8"
+                cx="50" cy="50" r="42" fill="none" stroke="url(#progressGradient)" strokeWidth="6"
                 strokeDasharray={`${2 * Math.PI * 42}`}
                 strokeDashoffset={`${2 * Math.PI * 42 * (1 - completionPercent / 100)}`}
                 strokeLinecap="round"
@@ -158,8 +170,8 @@ export default function Dashboard() {
         <Card hover={false}>
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-sm font-semibold text-[var(--text-primary)]">Today's Focus</h2>
-            <Button size="sm" variant="ghost" onClick={() => setShowTodoForm(true)}>
-              <Plus size={14} />
+            <Button variant="icon" onClick={() => setShowTodoForm(true)}>
+              <Plus size={16} />
             </Button>
           </div>
           <div className="space-y-2">
@@ -192,10 +204,10 @@ export default function Dashboard() {
               const count = habitLogs.filter((l) => l.completed_date === dateStr && l.completed).length;
               const isToday = isSameDay(day, new Date());
               return (
-                <div key={dateStr} className={`text-center p-1 rounded-lg ${isToday ? 'bg-accent/20' : ''}`}>
-                  <div className="text-xs font-medium text-[var(--text-primary)]">{format(day, 'd')}</div>
-                  <div className="flex justify-center gap-0.5 mt-0.5">
-                    {count > 0 && <div className="w-1 h-1 rounded-full bg-accent" />}
+                <div key={dateStr} className={`text-center py-2 px-1 rounded-[12px] ${isToday ? 'bg-[linear-gradient(135deg,#7C3AED,#6366f1)] text-white shadow-[0_4px_12px_rgba(124,58,237,0.5)] border-0' : 'bg-[rgba(255,255,255,0.06)] border border-[rgba(255,255,255,0.1)]'}`}>
+                  <div className={`text-xs ${isToday ? 'font-[700]' : 'font-medium text-[var(--text-primary)]'}`}>{format(day, 'd')}</div>
+                  <div className="flex justify-center gap-0.5 mt-1">
+                    {count > 0 && <div className={`w-1 h-1 rounded-full ${isToday ? 'bg-white' : 'bg-accent'}`} />}
                   </div>
                 </div>
               );

@@ -38,8 +38,8 @@ export default function Sidebar() {
           ${collapsed ? 'w-20' : 'w-60'}
         `}
         style={{
-          background: 'rgba(255, 255, 255, 0.03)',
-          borderRight: '1px solid rgba(255, 255, 255, 0.08)',
+          background: 'rgba(255, 255, 255, 0.04)',
+          borderRight: '1px solid rgba(255, 255, 255, 0.09)',
           backdropFilter: 'blur(20px)',
           WebkitBackdropFilter: 'blur(20px)',
         }}
@@ -79,7 +79,7 @@ export default function Sidebar() {
                 transition-all duration-200
                 ${collapsed ? 'justify-center' : ''}
                 ${isActive
-                  ? 'bg-gradient-to-r from-[#7C3AED]/20 to-[#3B82F6]/5 text-white border-l-[3px] border-[#7C3AED] rounded-r-lg shadow-sm'
+                  ? 'bg-[linear-gradient(135deg,rgba(124,58,237,0.4),rgba(59,130,246,0.3))] border-l-[3px] border-[#a78bfa] rounded-r-[12px] text-white font-semibold'
                   : 'text-[var(--text-secondary)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)] rounded-lg'
                 }
               `}

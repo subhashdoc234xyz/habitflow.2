@@ -15,31 +15,31 @@ export default function XPBar({ xp = 0, showDetails = true, size = 'md' }) {
   };
 
   return (
-    <div className="bg-[var(--bg-card)] border border-[var(--border)] rounded-xl p-4">
+    <div className="glass rounded-[20px] p-5">
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-amber-500/20 rounded-lg flex items-center justify-center">
             <Sparkles className="text-amber-400" size={16} />
           </div>
           <div>
-            <span className={`font-semibold text-[var(--text-primary)] ${sizes[size].text}`}>
+            <span className={`font-[700] text-white ${sizes[size].text}`}>
               Level {level.level}: {level.name}
             </span>
-            <span className={`${sizes[size].text} text-[var(--text-muted)] ml-2`}>
+            <span className={`${sizes[size].text} text-[rgba(255,255,255,0.55)] ml-2`}>
               {currentXP} XP
             </span>
           </div>
         </div>
         {showDetails && (
-          <span className={`${sizes[size].text} text-[var(--text-muted)]`}>
+          <span className={`${sizes[size].text} text-[rgba(255,255,255,0.55)]`}>
             {progress}%
           </span>
         )}
       </div>
 
-      <div className={`w-full bg-[var(--bg-hover)] rounded-full overflow-hidden ${sizes[size].bar}`}>
+      <div className={`w-full bg-[rgba(255,255,255,0.1)] rounded-full overflow-hidden ${sizes[size].bar}`}>
         <div
-          className={`h-full rounded-full bg-gradient-to-r from-accent to-amber-400 animate-xp`}
+          className="h-full rounded-full shimmer-fill"
           style={{ width: `${progress}%` }}
         />
       </div>

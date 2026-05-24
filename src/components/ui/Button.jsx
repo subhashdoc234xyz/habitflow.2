@@ -1,11 +1,12 @@
 import { forwardRef } from 'react';
 
 const variants = {
-  primary: 'bg-gradient-to-r from-[#7C3AED] to-[#3B82F6] text-white border-0 shadow-[0_4px_15px_rgba(124,58,237,0.4)] font-semibold rounded-[12px] hover:brightness-110 active:scale-[0.97]',
+  primary: 'bg-[linear-gradient(135deg,#7C3AED,#6366f1)] text-white border-0 shadow-[0_4px_15px_rgba(124,58,237,0.45)] font-[600] rounded-[12px] hover:shadow-[0_6px_25px_rgba(124,58,237,0.65)] active:scale-[0.97]',
   secondary: 'border border-white/20 bg-white/5 text-white font-semibold rounded-[12px] hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] hover:bg-white/10 active:scale-[0.97]',
   ghost: 'hover:bg-white/[0.04] border border-transparent hover:border-white/10 text-[var(--text-secondary)] hover:text-white',
   danger: 'bg-gradient-to-r from-red-500 to-[#e11d48] text-white border border-white/20 shadow-[0_4px_20px_rgba(239,68,68,0.3)]',
   success: 'bg-gradient-to-r from-[#10b981] to-[#059669] text-white border border-white/20 shadow-[0_4px_20px_rgba(16,185,129,0.3)]',
+  icon: 'bg-[rgba(255,255,255,0.1)] border border-[rgba(255,255,255,0.2)] rounded-[10px] w-[32px] h-[32px] p-0 flex items-center justify-center hover:bg-[rgba(255,255,255,0.18)] transition-colors',
 };
 
 const sizes = {
